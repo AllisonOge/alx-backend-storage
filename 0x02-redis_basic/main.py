@@ -15,7 +15,7 @@ print(key)
 local_redis = redis.Redis()
 print(local_redis.get(key))
 
-# Test cases
+# Test cases for get, get_str and get_int methods
 TEST_CASES = {
     b"foo": None,
     123: int,
@@ -25,3 +25,11 @@ TEST_CASES = {
 for value, fn in TEST_CASES.items():
     key = cache.store(value)
     assert cache.get(key, fn=fn) == value
+
+# test decorator function
+cache.store(b"first")
+print(cache.get(cache.store.__qualname__))
+
+cache.store(b"second")
+cache.store(b"third")
+print(cache.get(cache.store.__qualname__))
