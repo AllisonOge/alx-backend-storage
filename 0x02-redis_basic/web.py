@@ -9,6 +9,7 @@ from functools import wraps
 
 r = redis.Redis()
 
+
 def cache_with_expiration(expiration: int):
     """
     Decorator to cache the result of a function with an expiration time.
@@ -35,6 +36,7 @@ def cache_with_expiration(expiration: int):
         return wrapper
     return decorator
 
+
 @cache_with_expiration(expiration=10)
 def get_page(url: str) -> str:
     """
@@ -58,4 +60,3 @@ if __name__ == "__main__":
     get_page(test_url)
     get_page(test_url)
     print(f"Access count: {r.get(f'count:{test_url}').decode('utf-8')}")
-
