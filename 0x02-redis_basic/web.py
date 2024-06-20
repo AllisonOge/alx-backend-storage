@@ -30,7 +30,7 @@ def cache_with_expiration(expiration: int):
             content = func(url)
 
             # Cache the content with an expiration time
-            r.setex(url, expiration, content)
+            r.set(url, content, ex=expiration)
 
             return content
         return wrapper
