@@ -113,3 +113,22 @@ class Cache:
             Optional[int]: the retrieved data as an integer
         """
         return self.get(key, fn=int)
+
+def replay(method: Callable) -> None:
+    """
+    Display the history of calls of a particular function
+    Args:
+        method (Callable): the method to replay the call history for
+    """
+    # create the input and output list keys
+    input_key = f'{method.__qualname__}:inputs'
+    output_key = f'{method.__qualname__}:outputs'
+
+    # retrieve inputs and outputs from Redis
+    inputs = method.__self__._redis.lrange(input_key, 0, -1)
+    outputs = method.__self__._redis.lrange(output_key, 0, -1)
+
+    # print the call history
+    print(f'{method.__qualname__} was called {len(inputs)} times:')
+    for ip, op in zip(inputs, outputs):
+        print(f'{method.__qualname__}(*{ip.decode("utf-8")}) -> {op.decode("utf-8")}')
